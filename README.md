@@ -1,4 +1,4 @@
-# JWKS Key Generator
+# JWKS Key Generator (SingPass MyInfo)
 
 A Node.js application to generate JWKS keys. When you run `npm start`, it will automatically generate the `keys` folder along with the following files:
 - `enc-key.pem`
