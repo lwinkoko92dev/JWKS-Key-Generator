@@ -28,6 +28,9 @@ async function generateKey(keytype) {
 }
 
 async function generateJwks() {
+  // Ensure keys directory exists
+  createKeysDirectory();
+
   // Creating Signing Key
   let signingKey = await generateKey('signing');
   let publicSigningKeyJSON = signingKey.toJSON();
@@ -40,15 +43,15 @@ async function generateJwks() {
     keys: [
       {
         ...publicSigningKeyJSON,
-        ...{ use: 'sig' },
-        ...{ crv: 'P-256' },
-        ...{ alg: 'ES256' },
+        use: 'sig',
+        crv: 'P-256',
+        alg: 'ES256',
       },
       {
         ...publicEncryptionKeyJSON,
-        ...{ use: 'enc' },
-        ...{ crv: 'P-256' },
-        ...{ alg: 'ECDH-ES+A256KW' },
+        use: 'enc',
+        crv: 'P-256',
+        alg: 'ECDH-ES+A256KW',
       },
     ],
   };
@@ -60,7 +63,17 @@ async function generateJwks() {
 }
 
 function saveKeyToFile(filePath, key) {
+  // Ensure directory exists
+  createKeysDirectory();
+
   fs.writeFileSync(path.resolve(__dirname, filePath), key, 'utf8');
+}
+
+function createKeysDirectory() {
+  const keysDir = path.resolve(__dirname, 'keys');
+  if (!fs.existsSync(keysDir)) {
+    fs.mkdirSync(keysDir);
+  }
 }
 
 // Example usage
